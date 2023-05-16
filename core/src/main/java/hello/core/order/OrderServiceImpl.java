@@ -1,22 +1,27 @@
 package hello.core.order;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
-import hello.core.member.MemoryMemberRepository;
+import lombok.RequiredArgsConstructor;
 
+@Component
 public class OrderServiceImpl implements OrderService{
 
 	//필드
 	private final MemberRepository memberRepository;
 	private final DiscountPolicy discountPolicy;
 	
-	//생성자
-	public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+	// 생성자
+	public OrderServiceImpl(MemberRepository memberRepository, @Qualifier("mainDiscountPolicy")DiscountPolicy discountPolicy) {
+		super();
 		this.memberRepository = memberRepository;
 		this.discountPolicy = discountPolicy;
 	}
-
 
 	//메서드
 	@Override
@@ -27,5 +32,14 @@ public class OrderServiceImpl implements OrderService{
 		
 		return new Order(memberId, itemName, itemPrice, discountPrice);
 	}
+	
+	public MemberRepository getMemberRepository(){
+		return memberRepository;
+	}
+	
+	public DiscountPolicy getDiscountPolicy() {
+		return discountPolicy;
+	}
+
 
 }
